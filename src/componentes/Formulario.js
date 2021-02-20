@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import useMoneda from '../Hooks/useMoneda';
 import useCriptomonedas from '../Hooks/useCriptomoneda';
 import useCriptomoneda from '../Hooks/useCriptomoneda';
+import axios from 'axios';
 
 const Boton = styled.input`
     margin-top: 20px;
@@ -22,6 +23,8 @@ const Boton = styled.input`
 `
 
 const Formaulario = () => {
+    //state listado de criptomonedas
+    const [listaCripto,guardarCripto]=useState([]);
     
     const MONEDAS = [
         { codigo:'USD', nombre:'Dolar de Estados Unidos'},
@@ -33,10 +36,24 @@ const Formaulario = () => {
     //utilizar usemoneda
     const [moneda, SelecMonedas ] = useMoneda('elige tu moneda','',MONEDAS);
     //utilizar usecriptomoneda
-    const [criptomoneda,SelectCripto]=useCriptomoneda('elige la cripto','',[])
+    const [criptomoneda,SelectCripto]=useCriptomoneda('elige la cripto','',listaCripto)
+
+
 
 
     //consultar la api
+    useEffect(() => {
+        const consultarApi =async () => {
+            const url="https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD";
+            const resultado = await axios.get(url);
+            guardarCripto(resultado.data.Data); 
+        }
+        consultarApi();
+         
+        
+    },[])
+     
+    
 
     
 
