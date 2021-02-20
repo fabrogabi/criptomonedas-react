@@ -49,9 +49,11 @@ const Formaulario = ({guardarMoneda,guardarCriptomoneda}) => {
             const url="https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD";
             const resultado = await axios.get(url);
             guardarCripto(resultado.data.Data); 
+            
         }
+        
         consultarApi();
-         
+        
         
     },[])
      
