@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import useMoneda from '../Hooks/useMoneda';
-import useCriptomonedas from '../Hooks/useCriptomoneda';
+import Error from './Error'
 import useCriptomoneda from '../Hooks/useCriptomoneda';
 import axios from 'axios';
 
@@ -22,9 +22,11 @@ const Boton = styled.input`
     }
 `
 
-const Formaulario = () => {
+const Formaulario = ({guardarMoneda,guardarCriptomoneda}) => {
     //state listado de criptomonedas
     const [listaCripto,guardarCripto]=useState([]);
+    const [error,guardarError]=useState(false);
+
     
     const MONEDAS = [
         { codigo:'USD', nombre:'Dolar de Estados Unidos'},
@@ -54,11 +56,27 @@ const Formaulario = () => {
     },[])
      
     
+    //cuando el usuario hace submit
+    const cotizarMoneda= e=>{
+        e.preventDefault();
+        //validar los campos
+        if(moneda===""||criptomoneda===""){
+            guardarError(true);
+            return;
+        }
+        guardarError(false);
+        guardarMoneda(moneda);
+        guardarCriptomoneda(criptomoneda);
 
+    }
     
 
     return ( 
-        <form>
+        <form
+        onSubmit={cotizarMoneda}
+        >
+            { error ? <Error mensaje="Completar los dos Campos"/> : null}
+
             <SelecMonedas/> 
 
             <SelectCripto/>
